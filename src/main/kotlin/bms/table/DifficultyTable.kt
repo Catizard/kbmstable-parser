@@ -23,7 +23,9 @@ data class DifficultyTable(
     val levelOrder: List<String>?,
     private val data: List<DifficultyTableElement>,
     val course: List<Course>,
-    val lastUpdate: Long = 0
+    val lastUpdate: Long = 0,
+    // Unused field, only present here to keep the compatibility with upstream
+    val mode: String? = null
 ) {
     constructor(headerMeta: DifficultyTableHeader, data: List<DifficultyTableElement>) : this(
         headerURL = headerMeta.headerURL,
@@ -47,7 +49,7 @@ data class DifficultyTable(
         if (levelOrder != null && levelOrder.isNotEmpty()) {
             levelOrder.toTypedArray()
         } else {
-            data.filter { it.level != "" }.map { it.level as String }.distinct().toTypedArray()
+            data.filter { it.level != "" }.map { it.level }.distinct().toTypedArray()
         }
     }
 }

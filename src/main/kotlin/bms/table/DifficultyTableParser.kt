@@ -10,7 +10,7 @@ import java.net.http.HttpClient
 import java.net.http.HttpRequest
 import java.net.http.HttpResponse
 import java.time.Duration
-import java.util.*
+import java.util.Locale
 import java.util.regex.Pattern
 
 /**
@@ -90,12 +90,12 @@ class DifficultyTableParser {
 
     private fun readAllLines(url: String): List<String> {
         BufferedReader(InputStreamReader(URL(url).openStream())).use { br ->
-            val l: MutableList<String?> = mutableListOf()
-            var line: String? = null
+            val l: MutableList<String> = mutableListOf()
+            var line: String?
             while ((br.readLine().also { line = it }) != null) {
-                l.add(line)
+                l.add(line!!)
             }
-            return Collections.unmodifiableList<String>(l)
+            return l
         }
     }
 }
