@@ -10,7 +10,7 @@ import io.github.catizard.jbmstable_parser.bms.table.DifficultyTable as Upstream
 import io.github.catizard.jbmstable_parser.bms.table.DifficultyTableElement as UpstreamDifficultyTableElement
 import io.github.catizard.jbmstable_parser.bms.table.DifficultyTableParser as UpstreamParser
 
-class ParserTest {
+abstract class ParserTest {
     companion object {
         private val logger = KotlinLogging.logger {}
 
