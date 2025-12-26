@@ -1,4 +1,4 @@
-package com.github.catizard.bms.table
+package bms.table
 
 class HttpException(val code: Int, message: String) : Exception(message)
 

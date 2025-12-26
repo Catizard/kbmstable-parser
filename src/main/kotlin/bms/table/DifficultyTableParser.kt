@@ -1,4 +1,4 @@
-package com.github.catizard.bms.table
+package bms.table
 
 import kotlinx.serialization.json.Json
 import java.io.BufferedReader

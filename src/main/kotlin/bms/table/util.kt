@@ -1,4 +1,4 @@
-package com.github.catizard.bms.table
+package bms.table
 
 /**
  * Calculate the relative resource url based on source url

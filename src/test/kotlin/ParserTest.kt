@@ -1,6 +1,6 @@
-import com.github.catizard.bms.table.DifficultyTableElement
-import com.github.catizard.bms.table.DifficultyTableParser
-import com.github.catizard.bms.table.HttpException
+import bms.table.DifficultyTableElement
+import bms.table.DifficultyTableParser
+import bms.table.HttpException
 import io.github.oshai.kotlinlogging.KotlinLogging
 import java.net.http.HttpConnectTimeoutException
 import kotlin.test.Test
@@ -14,8 +14,8 @@ class ParserTest {
         /**
          * A simple wrapper that unifies the invoke between upstream and this project
          */
-        fun bms.table.DifficultyTableParser.parse(url: String): bms.table.DifficultyTable {
-            val dt = bms.table.DifficultyTable()
+        fun io.github.catizard.jbmstable_parser.bms.table.DifficultyTableParser.parse(url: String): io.github.catizard.jbmstable_parser.bms.table.DifficultyTable {
+            val dt = io.github.catizard.jbmstable_parser.bms.table.DifficultyTable()
             if (url.endsWith(".json")) {
                 dt.headURL = url
             } else {
@@ -90,7 +90,7 @@ class ParserTest {
 
     @Test
     fun clapTest() {
-        val upstreamParser = bms.table.DifficultyTableParser()
+        val upstreamParser = io.github.catizard.jbmstable_parser.bms.table.DifficultyTableParser()
         val parser = DifficultyTableParser()
         for (tableDefinition in RealTableDefinitions) {
             logger.info { "Processing clap test of ${tableDefinition.name}" }
@@ -113,7 +113,7 @@ class ParserTest {
                 assertEquals(upstreamCourse.name, selfCourse.name, "course name not equals")
                 assertEquals(upstreamCourse.charts.size, selfCourse.charts.size, "course charts size not equals")
                 selfCourse.charts.forEachIndexed { j, selfCourseChart ->
-                    val upstreamCourseChart = upstreamCourse.charts[j] as bms.table.DifficultyTableElement
+                    val upstreamCourseChart = upstreamCourse.charts[j] as io.github.catizard.jbmstable_parser.bms.table.DifficultyTableElement
                     clapDifficultyTableElement(selfCourseChart, upstreamCourseChart)
                 }
             }
@@ -124,7 +124,7 @@ class ParserTest {
         }
     }
 
-    private fun clapDifficultyTableElement(self: DifficultyTableElement, upstream: bms.table.DifficultyTableElement) {
+    private fun clapDifficultyTableElement(self: DifficultyTableElement, upstream: io.github.catizard.jbmstable_parser.bms.table.DifficultyTableElement) {
         assertEquals(upstream.level, self.level, "chart level not equals")
         assertEquals(upstream.appendURL, self.appendURL, "chart append url not equals")
         assertEquals(upstream.appendIPFS, self.appendIPFS, "chart append ipfs not equals")

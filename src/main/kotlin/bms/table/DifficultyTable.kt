@@ -1,4 +1,4 @@
-package com.github.catizard.bms.table
+package bms.table
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
