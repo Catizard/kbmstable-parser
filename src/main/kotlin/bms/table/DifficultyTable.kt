@@ -21,7 +21,7 @@ data class DifficultyTable(
     val symbol: String?,
     val originalURL: String?,
     val levelOrder: List<String>?,
-    val data: List<DifficultyTableElement>,
+    private val data: List<DifficultyTableElement>,
     val course: List<Course>,
     val lastUpdate: Long = 0
 ) {
@@ -36,11 +36,18 @@ data class DifficultyTable(
         course = headerMeta.courses,
     )
 
+    // Follow the upstream behavior
+    val elements: List<DifficultyTableElement> by lazy {
+        data.filter { chart ->
+            (chart.md5 != null && chart.md5.length > 24) || chart.sha256 != null && chart.sha256.length > 24
+        }
+    }
+
     val levelDescription: Array<String> by lazy {
         if (levelOrder != null && levelOrder.isNotEmpty()) {
             levelOrder.toTypedArray()
         } else {
-            data.filter { it.level != null }.map { it.level as String }.distinct().toTypedArray()
+            data.filter { it.level != "" }.map { it.level as String }.distinct().toTypedArray()
         }
     }
 }
@@ -104,15 +111,19 @@ data class DifficultyTableHeader(
 @Serializable
 data class DifficultyTableElement(
     @SerialName("artist") val artist: String? = null,
-    @SerialName("comment") val comment: String? = null,
-    @SerialName("level") val level: String? = null,
+    @SerialName("comment") val _comment: String? = null,
+    @SerialName("mode") val mode: String? = null,
+    @SerialName("level") val level: String = "",
     @SerialName("lr2_bmsid") val lr2BMSID: String? = null,
     @SerialName("md5") val md5: String? = null,
     @SerialName("sha256") val sha256: String? = null,
-    @SerialName("name_diff") val nameDiff: String? = null,
+    @SerialName("name_diff") val _nameDiff: String? = null,
     @SerialName("title") val title: String? = null,
     @SerialName("url") val url: String? = null,
     @SerialName("url_diff") val urlDiff: String? = null,
+    // TODO: Unused?
+    @SerialName("ipfs") val ipfs: String? = null,
+    @SerialName("ipfs_diff") val ipfsDiff: String? = null,
 ) {
     constructor(chart: Chart) : this(
         md5 = chart.md5,
@@ -120,6 +131,13 @@ data class DifficultyTableElement(
         title = chart.title,
         artist = chart.artist,
     )
+
+    val appendURL: String? = urlDiff
+    val appendIPFS: String? = ipfsDiff
+    val comment: String
+        get() = _comment ?: ""
+    val nameDiff: String
+        get() = _nameDiff ?: ""
 }
 
 @Serializable

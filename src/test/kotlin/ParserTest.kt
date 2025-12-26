@@ -1,3 +1,4 @@
+import com.github.catizard.bms.table.DifficultyTableElement
 import com.github.catizard.bms.table.DifficultyTableParser
 import com.github.catizard.bms.table.HttpException
 import io.github.oshai.kotlinlogging.KotlinLogging
@@ -107,6 +108,43 @@ class ParserTest {
             assertEquals(upstreamResult.levelDescription.joinToString("#"), selfResult.levelDescription.joinToString("#"), "levelDescription not equals")
             val upstreamCourses = upstreamResult.course.flatMap { innerArray -> innerArray.map { it } }.toList()
             assertEquals(upstreamCourses.size, selfResult.course.size, "courses size not equals")
+            selfResult.course.forEachIndexed { i, selfCourse ->
+                val upstreamCourse = upstreamCourses[i]
+                assertEquals(upstreamCourse.name, selfCourse.name, "course name not equals")
+                assertEquals(upstreamCourse.charts.size, selfCourse.charts.size, "course charts size not equals")
+                selfCourse.charts.forEachIndexed { j, selfCourseChart ->
+                    val upstreamCourseChart = upstreamCourse.charts[j] as bms.table.DifficultyTableElement
+                    clapDifficultyTableElement(selfCourseChart, upstreamCourseChart)
+                }
+            }
+            selfResult.elements.forEachIndexed { i, selfChart ->
+                val upstreamChart = upstreamResult.elements[i]
+                clapDifficultyTableElement(selfChart, upstreamChart)
+            }
         }
+    }
+
+    private fun clapDifficultyTableElement(self: DifficultyTableElement, upstream: bms.table.DifficultyTableElement) {
+        assertEquals(upstream.level, self.level, "chart level not equals")
+        assertEquals(upstream.appendURL, self.appendURL, "chart append url not equals")
+        assertEquals(upstream.appendIPFS, self.appendIPFS, "chart append ipfs not equals")
+        assertEquals(upstream.comment, self.comment, "comment not equals")
+        assertEquals(upstream.title, self.title, "chart title not equals")
+        assertEquals(upstream.url, self.url, "chart url not equals")
+        assertEquals(upstream.ipfs, self.ipfs, "chart ipfs not equals")
+        assertEquals(upstream.artist, self.artist, "chart title not equals")
+        assertEquals(upstream.mD5, self.md5, "chart md5 not equals")
+        assertEquals(upstream.shA256, self.sha256, "chart sha256 not equals")
+        assertEquals(upstream.mode, self.mode, "chart mode not equals")
+        // unused fields
+        // assertEquals(upstream.evaluation, self.evaluation, "chart evaluation not equals")
+        // assertEquals(upstream.packageURL, self.packageURL, "chart package url not equals")
+        // assertEquals(upstream.packageName, self.packageName, "chart package name not equals")
+        // assertEquals(upstream.parentHash, selfCourse.parentHash, "chart parent hash not equals")
+        // assertEquals(upstream.state, self.state, "chart state not equals")
+        // assertEquals(upstream.proposer, self.proposer, "chart proposer not equals")
+        // assertEquals(upstream.appendArtist, self.appendArtist, "chart append artist not equals")
+        // assertEquals(upstream.information, self.information, "chart information not equals")
+        // assertEquals(upstream.bmsid, self.lr2BMSID, "chart lr2 BMSID not equals")
     }
 }
