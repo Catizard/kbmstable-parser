@@ -68,12 +68,12 @@ class DifficultyTableParser {
     }
 
     private fun fetchJSON(url: String): String {
-        val httpClient = HttpClient.newHttpClient()
+        val httpClient = HttpClient.newBuilder().followRedirects(HttpClient.Redirect.NORMAL).build()
         val request = HttpRequest.newBuilder(URI.create(url))
             .timeout(Duration.ofSeconds(15))
             .GET()
             .build()
-        val resp = httpClient.send<String>(request, HttpResponse.BodyHandlers.ofString())
+        val resp = httpClient.send(request, HttpResponse.BodyHandlers.ofString())
         val body = resp.body()
             .trim()
             .replace("\ufeff", "")
